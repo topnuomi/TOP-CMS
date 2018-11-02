@@ -1,0 +1,89 @@
+{view name="Common/header"}
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>上级导航
+            </label>
+            <div class="layui-input-inline">
+                <select name="pid">
+                    <option value="0">顶级导航</option>
+                    {loop $tree as $vo}
+                        <option value="{$vo['id']}" {if $id == $vo['id']}selected{/if}>{$vo['space']}{$vo['name']}</option>
+                    {/loop}
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>上级导航
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                <span class="x-red">*</span>导航名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>导航的名称
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>链接
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="url" name="url" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>点击导航跳转链接
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                排序
+            </label>
+            <div class="layui-input-inline">
+                <input type="number" id="sort" name="sort" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                数字越小越靠前
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+            $.post("{:u('/Manage/Channel/add')}", data.field, function(d) {
+                if (d.status == 1) {
+                    //发异步，把数据提交给php
+                    layer.alert(d.result, {icon: 6},function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                        parent.window.location.reload();
+                    });
+                } else {
+                    layer.msg(d.result, {icon: 5});
+                }
+            }, 'json');
+            return false;
+        });
+
+    });
+</script>
+{view name="Common/footer"}

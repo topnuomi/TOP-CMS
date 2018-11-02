@@ -1,0 +1,40 @@
+<div class="addons_uploadfive_{$name}">
+    <div id="queue_{$name}">
+    </div>
+    <input type="hidden" name="{$name}" value="{$value}">
+    <input id="upload_{$name}" name="upload_{$name}" type="file" multiple="false">
+    <div class="file_{$name}" title="点击删除">{if $path}{$path}{/if}</div>
+</div>
+<script type="text/javascript">
+    $('#upload_{$name}').uploadifive({
+        'formData'     : {
+            'timestamp' : '{:time()}',
+            'token'     : "{:md5('unique_salt' . time())}",
+            'imgsize'          : ''
+        },
+        "buttonText" : "选择文件",
+        'auto': true,
+        'queueID': 'queue_{$name}',
+        'uploadScript': "{:u('/Manage/Upload/uploadfiveFile')}",
+        'onUploadComplete':
+            function (file, data) {
+                $('#queue_{$name}').html('');
+                if (data) {
+                    var json = eval('(' + data + ')');
+                    if (json.status == 1) {
+                        $("input[name='{$name}']").val(json.ext.id);
+                        $('.addons_uploadfive_{$name}').find('.file_{$name}').html('<div style="margin-top: 10px;">' + json.ext.path + '</div>');
+                    } else {
+                        layer.msg(json.result, {icon: 5});
+                    }
+                }
+                else {
+                    alert('上传失败！！' + rspdesc);
+                }
+            }
+    });
+    $('.file_{$name}').click(function () {
+        $(this).html('');
+        $(this).parent().find("input[name='{$name}']").val(0);
+    });
+</script>

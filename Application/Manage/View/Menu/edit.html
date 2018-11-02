@@ -1,0 +1,101 @@
+{view name="Common/header"}
+    <div class="x-body">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="phone" class="layui-form-label">
+                    <span class="x-red">*</span>上级菜单
+                </label>
+                <div class="layui-input-inline">
+                <select name="pid">
+                    <option value="0">顶级菜单</option>
+                    {loop $menu as $vo}
+                        <option value="{$vo['id']}" {if $pid == $vo['id']}selected{/if}>{$vo['space']}{$vo['menu_name']}</option>
+                    {/loop}
+                </select>
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>上级菜单
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="username" class="layui-form-label">
+                    <span class="x-red">*</span>菜单名称
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="name" value="{$info['menu_name']}" name="name" required="" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>左侧菜单栏显示的名称
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="phone" class="layui-form-label">
+                    <span class="x-red">*</span>链接
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="url" value="{$info['url']}" name="url" required="" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>点击菜单跳转链接
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="phone" class="layui-form-label">
+                    <span class="x-red">*</span>是否显示
+                </label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="display" value="1" title="是" {if $info['display'] == 1}checked{/if}>
+                    <input type="radio" name="display" value="0" title="否" {if $info['display'] == 0}checked{/if}>
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>是否在左侧菜单显示
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="phone" class="layui-form-label">
+                    排序
+                </label>
+                <div class="layui-input-inline">
+                    <input type="number" id="sort" value="{$info['sort']}" name="sort" required="" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    数字越小越靠前
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    保存
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        layui.use(['form', 'layer'], function() {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            //监听提交
+            form.on('submit(add)', function(data) {
+                $.post("{:u('/Manage/Menu/edit/id/' . $id)}", data.field, function(d) {
+                    if (d.status == 1) {
+                        //发异步，把数据提交给php
+                        layer.alert("保存成功", {icon: 6},function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            parent.window.location.reload();
+                        });
+                    } else {
+                        layer.msg(d.result, {icon: 5});
+                    }
+                }, 'json');
+                return false;
+            });
+
+        });
+    </script>
+{view name="Common/footer"}

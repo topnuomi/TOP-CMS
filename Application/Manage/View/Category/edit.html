@@ -1,0 +1,207 @@
+{view name="Common/header"}
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>上级分类
+            </label>
+            <div class="layui-input-inline">
+                <select name="pid">
+                    <option value="0">顶级分类</option>
+                    {loop $list as $vo}
+                        <option value="{$vo['id']}" {if $info['pid'] == $vo['id']}selected{/if}>{$vo['space']}{$vo['title']}</option>
+                    {/loop}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                关联导航
+            </label>
+            <div class="layui-input-inline">
+                <select name="channel_id">
+                    <option value="0">无</option>
+                    {loop $channel as $vo}
+                    <option value="{$vo['id']}"{if $info['channel_id']==$vo['id']}selected{/if}>{$vo['name']}</option>
+                    {/loop}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                <span class="x-red">*</span>分类标识
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name" value="{$info['name']}" required="" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>标识
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>分类名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="title" name="title" value="{$info['title']}" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>分类的中文名称
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>发布内容
+            </label>
+            <div class="layui-input-inline">
+                <input type="radio" name="create_content" value="1" title="允许" {if $info['create_content'] == 1}checked{/if}>
+                <input type="radio" name="create_content" value="0" title="禁止" {if $info['create_content'] == 0}checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>是否允许发布内容
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>绑定模型
+            </label>
+            <div class="layui-input-inline">
+                <select name="model_id">
+                    {loop $model_list as $vo}
+                        <option value="{$vo['id']}" {if $info['model_id'] == $vo['id']}selected{/if}>{$vo['model_name']}</option>
+                    {/loop}
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>发布内容绑定模型
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>列表行数
+            </label>
+            <div class="layui-input-inline">
+                <input type="number" id="list_row" name="list_row" required="" value="{$info['list_row']}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>列表行数,超过开始分页
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>展示方式
+            </label>
+            <div class="layui-input-inline">
+                <select name="action">
+                    <option value="Article/lists" {if $info['action'] == 'Article/lists'}selected{/if}>列表</option>
+                    <option value="Article/index" {if $info['action'] == 'Article/index'}selected{/if}>频道</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>分类默认执行的方法
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                列表页
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="list_template" name="list_template" value="{$info['list_template']}" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                列表显示页面
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                频道页
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="index_template" name="index_template" value="{$info['index_template']}" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                频道显示页面
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                详情页
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="detail_template" name="detail_template" value="{$info['detail_template']}" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                详情显示页面
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                排序
+            </label>
+            <div class="layui-input-inline">
+                <input type="number" id="sort" name="sort" value="{$info['sort']}" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                数字越小越靠前
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                图标
+            </label>
+            <div class="layui-input-inline">
+                {:addons('Uploadfive', ['name' => 'icon', 'value' => $info['icon'], 'path' => \Manage\Helper::getFile($info['icon'])['path']])}
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                分类图标
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                状态
+            </label>
+            <div class="layui-input-inline">
+                <input type="radio" name="status" value="1" title="启用" {if $info['status'] == 1}checked{/if}>
+                <input type="radio" name="status" value="0" title="禁用" {if $info['status'] == 0}checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                分类是否启用
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="">
+                保存
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+            $.post("{:u('/Manage/Category/edit/id/' . $id)}", data.field, function(d) {
+                if (d.status == 1) {
+                    //发异步，把数据提交给php
+                    layer.alert("保存成功", {icon: 6},function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        // 关闭当前frame
+                        parent.layer.close(index);
+                        parent.window.location.reload();
+                    });
+                } else {
+                    layer.msg(d.result, {icon: 5});
+                }
+            }, 'json');
+            return false;
+        });
+
+    });
+</script>
+{view name="Common/footer"}

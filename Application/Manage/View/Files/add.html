@@ -1,0 +1,57 @@
+{view name="Common/header"}
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                文件
+            </label>
+            <div class="layui-input-inline">
+                <div class="addons_uploadfive">
+                    <div id="queue">
+                    </div>
+                    <input id="upload" name="upload" type="file" multiple="false">
+                </div>
+                <script type="text/javascript">
+                    $('#upload').uploadifive({
+                        'formData'     : {
+                            'timestamp' : '{:time()}',
+                            'token'     : "{:md5('unique_salt' . time())}",
+                            'imgsize'          : ''
+                        },
+                        "buttonText" : "选择文件",
+                        'auto': true,
+                        'queueID': 'queue',
+                        'uploadScript': "{:u('/Manage/Upload/uploadfiveFile')}",
+                        'onUploadComplete':
+                            function (file, data) {
+                                $('#queue').html('');
+                                if (data) {
+                                    var json = eval('(' + data + ')');
+                                    if (json.status == 1) {
+                                        // 获得frame索引
+                                        var index = parent.layer.getFrameIndex(window.name);
+                                        //关闭当前frame
+                                        parent.layer.close(index);
+                                        parent.window.location.reload();
+                                    } else {
+                                        layer.msg(json.result, {icon: 5});
+                                    }
+                                }
+                                else {
+                                    alert('上传失败！！' + rspdesc);
+                                }
+                            }
+                    });
+                    $('.file').click(function () {
+                        $(this).html('');
+                        $(this).parent().find("input[name='path']").val(0);
+                    });
+                </script>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                上传文件
+            </div>
+        </div>
+    </form>
+</div>
+{view name="Common/footer"}

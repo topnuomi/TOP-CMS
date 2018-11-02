@@ -1,0 +1,18 @@
+<script>
+    var editor_{$name};
+    KindEditor.ready(function(K) {
+        editor_{$name} = K.create('textarea[name="{$name}"]', {
+            cssPath : '/Resource/kindeditor/plugins/code/prettify.css',
+            uploadJson : '/Resource/kindeditor/php/upload_json.php',
+            fileManagerJson : '/Resource/kindeditor/php/file_manager_json.php',
+            allowFileManager : true,
+            afterCreate : function() {
+            },
+            afterBlur: function(){  //利用该方法处理当富文本编辑框失焦之后，立即同步数据
+                K.sync('textarea[name="{$name}"]') ;
+            }
+        });
+        prettyPrint();
+    });
+</script>
+<textarea name="{$name}" style="width:{$config['options']['width']}px;height:{$config['options']['height']}px;visibility:hidden;">{$content}</textarea>

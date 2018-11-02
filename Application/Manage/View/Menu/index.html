@@ -1,0 +1,100 @@
+{view name="Common/header"}
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a>
+                <cite>{empty name="$parent"}菜单管理{else /}[{$parent['menu_name']}]子菜单{/empty}</cite>
+            </a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+        <xblock>
+            <a class="layui-btn layui-btn-primary" href="{:u('/Manage/Menu/index')}">顶级列表</a>
+            <button class="layui-btn" onclick="x_admin_show('增加菜单','/Manage/Menu/add.html')"><i class="layui-icon"></i>添加</button>
+            <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+            <span class="x-right" style="line-height:40px">共有数据：{$number} 条</span>
+        </xblock>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+                    </th>
+                    <th>菜单名称</th>
+                    <th>链接</th>
+                    <th>是否显示</th>
+                    <th>排序</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {loop $list as $vo}
+                    <tr>
+                        <td width="2%">
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="{$vo['id']}"><i class="layui-icon">&#xe605;</i></div>
+                        </td>
+                        <td><a href="{:u('/Manage/Menu/index/pid/' . $vo['id'])}">{$vo['menu_name']}</a></td>
+                        <td>{$vo['url']}</td>
+                        <td>{if $vo['display']}显示{else /}隐藏{/if}</td>
+                        <td>{$vo['sort']}</td>
+                        <td class="td-manage">
+                            <a title="增加子菜单" class="layui-btn layui-btn-xs" onclick="x_admin_show('增加子菜单','{:u('/Manage/Menu/add/pid/' . $vo['id'])}')" href="javascript:;"><i class="layui-icon"></i>增加子菜单</a>
+                            <a title="编辑" class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('编辑','{:u('/Manage/Menu/edit/id/' . $vo['id'])}')" href="javascript:;"><i class="layui-icon">&#xe642;</i>编辑</a>
+                            <a title="删除" class="layui-btn layui-btn-danger layui-btn-xs" onclick="menu_del(this,'{$vo['id']}')" href="javascript:;"><i class="layui-icon">&#xe640;</i>删除</a>
+                        </td>
+                    </tr>
+                {/loop}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+        });
+
+        /*用户-删除*/
+        function menu_del(obj, id) {
+            layer.confirm('确认要删除吗？', function(index) {
+                $.post("{:u('/Manage/Menu/delete')}", {id: id}, function(data) {
+                    if(data.status == 1) {
+                        //发异步删除数据
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!', {
+                            icon: 1,
+                            time: 1000
+                        });
+                    } else {
+                        layer.msg(data.result, {icon: 5});
+                    }
+                }, 'json');
+            });
+        }
+
+        function delAll(argument) {
+            var data = tableCheck.getData();
+            layer.confirm('确认要删除吗？' + data, function(index) {
+                $.post("{:u('/Manage/Menu/delete')}", {id: data}, function (data) {
+                    if (data.status == 1) {
+                        layer.msg('删除成功', {
+                            icon: 1
+                        });
+                        $(".layui-form-checked").not('.header').parents('tr').remove();
+                    } else {
+                        return false;
+                    }
+                }, 'json');
+            });
+        }
+    </script>
+{view name="Common/footer"}

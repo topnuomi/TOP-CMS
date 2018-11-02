@@ -1,0 +1,159 @@
+{view name="Common/header"}
+<div class="x-body">
+    <blockquote class="layui-elem-quote">系统保留字段：id（主键）、category_id、create_time、status</blockquote>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>字段名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="field_name" name="field_name" value="{$info['field_name']}" required="" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>数据表真实字段名
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                <span class="x-red">*</span>显示名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="field_zhname" name="field_zhname" value="{$info['field_zhname']}" required="" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>表单中显示名称
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                <span class="x-red">*</span>字段类型
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="field_type" name="field_type" value="{$info['field_type']}" required="" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>字段类型及长度，如 char (32)
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                <span class="x-red">*</span>表单类型
+            </label>
+            <div class="layui-input-inline">
+                <select name="type" id="type">
+                    <option value="1" {if $info['type'] == 1}selected{/if}>字符</option>
+                    <option value="2" {if $info['type'] == 2}selected{/if}>数字</option>
+                    <option value="3" {if $info['type'] == 3}selected{/if}>枚举</option>
+                    <option value="4" {if $info['type'] == 4}selected{/if}>单选</option>
+                    <option value="5" {if $info['type'] == 5}selected{/if}>文本框</option>
+                    <option value="6" {if $info['type'] == 6}selected{/if}>编辑器</option>
+                    <option value="7" {if $info['type'] == 7}selected{/if}>上传图片</option>
+                    <option value="8" {if $info['type'] == 8}selected{/if}>上传附件</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                选项
+            </label>
+            <div class="layui-input-inline">
+                <textarea class="layui-textarea" name="select_list" id="select_list" cols="30" rows="10">{$info['select_list']}</textarea>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                枚举、单选选项，配置值:显示值 每个选项使用回车分隔
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                允许为空
+            </label>
+            <div class="layui-input-inline">
+                <input type="radio" name="is_null" value="1" title="是" {if $info['is_null'] == 1}checked{/if}>
+                <input type="radio" name="is_null" value="0" title="否" {if $info['is_null'] == 0}checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                是否允许为空
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                默认值
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="default_value" id="default_value" value="{$info['default_value']}" required="" lay-verify="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                默认值 <span class="x-red">*</span>某些字段类型不能设置默认值，如 text
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="username" class="layui-form-label">
+                帮助
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="notice" name="notice" value="{$info['notice']}" required="" lay-verify="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                列表中显示的帮助信息
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                列表显示
+            </label>
+            <div class="layui-input-inline">
+                <input type="radio" name="list_display" value="1" title="是" {if $info['list_display'] == 1}checked{/if}>
+                <input type="radio" name="list_display" value="0" title="否" {if $info['list_display'] == 0}checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                是否在内容列表显示 <span class="x-red">*</span>自定义列表模板请自行编写逻辑
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label">
+                排序
+            </label>
+            <div class="layui-input-inline">
+                <input type="number" id="sort" name="sort" value="{$info['sort']}" required="" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                数字越小越靠前
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="">
+                保存
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+            $.post("{:u('/Manage/Field/edit/id/' . $id)}", data.field, function(d) {
+                if (d.status == 1) {
+                    //发异步，把数据提交给php
+                    layer.alert("保存成功", {icon: 6},function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                        parent.window.location.reload();
+                    });
+                } else {
+                    layer.msg(d.result, {icon: 5});
+                }
+            }, 'json');
+            return false;
+        });
+
+    });
+</script>
+{view name="Common/footer"}

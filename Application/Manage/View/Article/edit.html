@@ -1,0 +1,167 @@
+{view name="Common/header"}
+<div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a>
+                <cite>编辑内容</cite>
+            </a>
+        </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i>
+    </a>
+</div>
+<div class="x-body">
+    <form class="layui-form">
+        {loop $field as $vo}
+            {switch name="$vo['type']"}
+                {case value="1"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="{$vo['field_name']}" value="{$info[$vo['field_name']]}" required="" lay-verify="{if $vo['is_null'] == 0}required{/if}" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+                {case value="2"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="number" name="{$vo['field_name']}" value="{$info[$vo['field_name']]}" required="" lay-verify="{if $vo['is_null'] == 0}required{/if}" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+                {case value="3"}
+                    {enum from="$vo['select_list']" to="$enum"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            {notempty name="$enum"}
+                            <select name="{$vo['field_name']}">
+                                {loop $enum as $k => $v}
+                                <option value="{$k}" {if $k == $info[$vo['field_name']]}selected{/if}>{$v}</option>
+                                {/loop}
+                            </select>
+                            {/notempty}
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+                {case value="4"}
+                    {enum from="$vo['select_list']" to="$enum"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            {notempty name="$enum"}
+                                {loop $enum as $k => $v}
+                                    <input type="radio" name="{$vo['field_name']}" value="{$k}" title="{$v}" {if $k == $info[$vo['field_name']]}checked{/if}>
+                                {/loop}
+                            {/notempty}
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+                {case value="5"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            <textarea class="layui-textarea" name="{$vo['field_name']}" id="{$vo['field_name']}" lay-verify="{if $vo['is_null'] == 0}required{/if}" cols="30" rows="10">{$info[$vo['field_name']]}</textarea>
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+                {case value="6"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            {:addons('Editor', ['name'=>$vo['field_name'],'content'=>$info[$vo['field_name']]])}
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+                {case value="7"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            {:addons('Uploadfive', ['name' => $vo['field_name'], 'value' => $info[$vo['field_name']], 'path' => \Manage\Helper::getFile($info[$vo['field_name']])['path']])}
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+                {case value="8"}
+                    <div class="layui-form-item">
+                        <label for="username" class="layui-form-label">
+                            {$vo['field_zhname']}
+                        </label>
+                        <div class="layui-input-inline">
+                            {:addons('UploadfiveFile', ['name' => $vo['field_name'], 'value' => $info[$vo['field_name']], 'path' => \Manage\Helper::getFile($info[$vo['field_name']])['path']])}
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">
+                            {$vo['notice']}
+                        </div>
+                    </div>
+                {/case}
+            {/switch}
+        {/loop}
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" id="sumitForm" lay-filter="add" lay-submit="">
+                保存
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function(data) {
+            $.post("{:u('/Manage/Article/edit/categoryId/' . $category_id . '/id/' . $id)}", data.field, function(d) {
+                if (d.status == 1) {
+                    layer.alert("保存成功", {icon: 6},function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                        parent.window.location.reload();
+                    });
+                } else {
+                    layer.msg(d.result, {icon: 5});
+                }
+            }, 'json');
+            return false;
+        });
+    });
+</script>
+{view name="Common/footer"}
