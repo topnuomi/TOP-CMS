@@ -13,6 +13,9 @@
     <xblock>
         <a class="layui-btn layui-btn-primary" href="{:u('/Manage/Article/index')}">返回</a>
         <button class="layui-btn" onclick="x_admin_show('[{$category['title']}]发布内容','{:u('/Manage/Article/add/categoryId/' . $category['id'])}')"><i class="layui-icon"></i>发布</button>
+        <button class="layui-btn layui-btn-primary" onclick="copy()">复制</button>
+        <button class="layui-btn layui-btn-primary" onclick="move()">剪切</button>
+        <button class="layui-btn layui-btn-primary" onclick="paste()">粘贴</button>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
         <span class="x-right" style="line-height:40px">共有数据：{$number} 条</span>
     </xblock>
@@ -97,6 +100,48 @@
                 }
             }, 'json');
         });
+    }
+    function move() {
+        var data = tableCheck.getData();
+        var cate = "{$category['id']}";
+        $.post("{:u('/Manage/Article/move')}", {categoryId: cate, id: data}, function (data) {
+            if (data.status == 1) {
+                //捉到所有被选中的，发异步进行删除
+                layer.msg('剪切成功，请选择粘贴位置', {
+                    icon: 1
+                });
+            } else {
+                layer.msg(data.result, {icon: 5});
+            }
+        }, 'json');
+    }
+    function copy() {
+        var data = tableCheck.getData();
+        var cate = "{$category['id']}";
+        $.post("{:u('/Manage/Article/move/type/copy')}", {categoryId: cate, id: data}, function (data) {
+            if (data.status == 1) {
+                //捉到所有被选中的，发异步进行删除
+                layer.msg('复制成功，请选择粘贴位置', {
+                    icon: 1
+                });
+            } else {
+                layer.msg(data.result, {icon: 5});
+            }
+        }, 'json');
+    }
+    function paste() {
+        var cate = "{$category['id']}";
+        $.post("{:u('/Manage/Article/paste')}", {categoryId: cate}, function (data) {
+            if (data.status == 1) {
+                //捉到所有被选中的，发异步进行删除
+                // layer.msg(data.result, {icon: 1}, function () {
+                //     window.location.reload();
+                // });
+                window.location.reload();
+            } else {
+                layer.msg(data.result, {icon: 5});
+            }
+        }, 'json');
     }
 </script>
 {view name="Common/footer"}
