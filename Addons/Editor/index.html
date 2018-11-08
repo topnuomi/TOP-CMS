@@ -3,8 +3,8 @@
     KindEditor.ready(function(K) {
         editor_{$name} = K.create('textarea[name="{$name}"]', {
             cssPath : '/Resource/kindeditor/plugins/code/prettify.css',
-            uploadJson : '/Resource/kindeditor/php/upload_json.php',
-            fileManagerJson : '/Resource/kindeditor/php/file_manager_json.php',
+            uploadJson : "{:u('Addons/Home/Editor/Index/upload')}",
+            fileManagerJson : "{:u('Addons/Home/Editor/Index/manage')}",
             allowFileManager : true,
             afterCreate : function() {
             },

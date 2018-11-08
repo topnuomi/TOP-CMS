@@ -23,13 +23,15 @@ class Router {
     public static function pathinfo() {
         $s = ((isset($_GET['s'])) ? $_GET['s'] : '');
         $s = (!$s) ? ((isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : DEFAULT_URL) : $s;
+        // 判断是否为插件路由
+        $isAddon = false;
         $paramArr = self::processingRule($s);
-        $className = '\\' . $paramArr[0] . '\\Controller\\' . ((isset($paramArr[1]) && $paramArr[1] != '') ? $paramArr[1] : 'Index');
-        $actionName = (isset($paramArr[2]) && $paramArr[2] != '') ? $paramArr[2] : 'index';
-        define('CONTROLLER', ((isset($paramArr[1]) && $paramArr[1] != '') ? $paramArr[1] : 'Index')); //拿到不包含命名空间的控制器名
-        $param = [];
-        if (is_dir(APP . $paramArr[0])) {
+        if (is_dir(APP . $paramArr[0])) { // 一般路由
+            $className = '\\' . $paramArr[0] . '\\Controller\\' . ((isset($paramArr[1]) && $paramArr[1] != '') ? $paramArr[1] : 'Index');
+            $actionName = (isset($paramArr[2]) && $paramArr[2] != '') ? $paramArr[2] : 'index';
+            define('CONTROLLER', ((isset($paramArr[1]) && $paramArr[1] != '') ? $paramArr[1] : 'Index')); //拿到不包含命名空间的控制器名
             define('MODULE', $paramArr[0]);
+            $param = [];
             if (class_exists($className)) {
                 self::$classMethods = get_class_methods($className);
                 if (!in_array($actionName, self::$classMethods)) {
@@ -42,12 +44,31 @@ class Router {
                 echo '<pre />';
                 throw new \Exception('控制器 ' . $className . ' 未找到');
             }
+        } else if (is_dir(BASEPATH . $paramArr[0])) { // 插件路由
+            if (is_dir(APP . $paramArr[1])) {
+                $isAddon = true;
+                $className = '\\' . $paramArr[0] . '\\' . $paramArr[2] . '\\' . $paramArr[3];
+                $actionName = (isset($paramArr[4]) && $paramArr[4] != '') ? $paramArr[4] : 'index';
+                define('CONTROLLER', ((isset($paramArr[3]) && $paramArr[3] != '') ? $paramArr[3] : 'Index')); //拿到不包含命名空间的控制器名
+                define('MODULE', $paramArr[1]);
+                $param = [];
+                self::$classMethods = get_class_methods($className);
+                if (!in_array($actionName, self::$classMethods)) {
+                    echo '<pre />';
+                    throw new \Exception('插件方法 ' . $actionName . ' 未找到');
+                } elseif (isset($paramArr[3]) && $paramArr[3] != '') {
+                    $param = self::getParams($paramArr, $className, $actionName, true);
+                }
+            } else {
+                echo '<pre />';
+                throw new \Exception('模块 ' . $paramArr[0] . ' 未找到');
+            }
         } else {
             echo '<pre />';
             throw new \Exception('模块 ' . $paramArr[0] . ' 未找到');
         }
         define('ACTION', $actionName);
-        return ['CLASS' => $className, 'FUNCTION' => $actionName, 'PARAM' => $param];
+        return ['CLASS' => $className, 'FUNCTION' => $actionName, 'PARAM' => $param, 'ADDON' => $isAddon];
     }
 
     /**
@@ -97,10 +118,14 @@ class Router {
      * @return array
      * @throws \ReflectionException
      */
-    public static function getParams($paramArr, $className, $actionName) {
+    public static function getParams($paramArr, $className, $actionName, $isAddons = false) {
         unset($paramArr[0]);
         unset($paramArr[1]);
         unset($paramArr[2]);
+        if ($isAddons === true) {
+            unset($paramArr[3]);
+            unset($paramArr[4]);
+        }
         $paramName = (new \ReflectionMethod($className, $actionName))->getParameters();
         $paramNameArray = [];
         for ($i = 0; $i < count($paramName); $i++) {
@@ -124,19 +149,24 @@ class Router {
      */
     public static function build() {
         $info = self::pathinfo();
-        if (Config::get('session') === true) {
-            session_start();
-        }
-        $viewName = (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : serialize($_SERVER['argv']));
-        $cacheInstance = \Top\Cache\ViewCache::getInstance();
-        if (!$cacheInstance->check(md5($viewName)) || DEBUG === true) {
+        if ($info['ADDON'] === true) {
             $object = new $info['CLASS'];
-            if (in_array('_init', self::$classMethods)) {
-                $object->_init();
-            }
             call_user_func_array([$object, $info['FUNCTION']], $info['PARAM']);
         } else {
-            echo $cacheInstance->get(md5($viewName));
+            if (Config::get('session') === true) {
+                session_start();
+            }
+            $viewName = (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : serialize($_SERVER['argv']));
+            $cacheInstance = \Top\Cache\ViewCache::getInstance();
+            if (!$cacheInstance->check(md5($viewName)) || DEBUG === true) {
+                $object = new $info['CLASS'];
+                if (in_array('_init', self::$classMethods)) {
+                    $object->_init();
+                }
+                call_user_func_array([$object, $info['FUNCTION']], $info['PARAM']);
+            } else {
+                echo $cacheInstance->get(md5($viewName));
+            }
         }
     }
 }

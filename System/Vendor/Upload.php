@@ -41,6 +41,23 @@ class Upload {
         return $this->error;
     }
 
+    public function upload($tempFile, $fileName) {
+        $fileParts = pathinfo($tempFile['name']);
+        $targetPath = self::$dirName;
+        if (!is_dir($targetPath)) mkdir($targetPath, 0777, true);
+        $targetFile = rtrim($targetPath, '/') . '/' . ((!$fileName) ? $tempFile['name'] : $fileName);
+        if (in_array($fileParts['extension'], self::$fileType)) {
+            if (move_uploaded_file($tempFile['tmp_name'], $targetFile . '.' . $fileParts['extension'])) {
+                return rtrim(self::$dirName, '/') . '/' . $fileName . '.' . $fileParts['extension'];
+            } else {
+                $this->error = '上传失败';
+                return false;
+            }
+        }
+        $this->error = '文件类型不被允许';
+        return false;
+    }
+
     /**
      * 上传图片
      * @param string $fileName
