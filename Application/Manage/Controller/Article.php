@@ -21,13 +21,13 @@ class Article extends Manage {
         $page = new Page(16, $all);
         $list = $article->getContentListByCategoryId($categoryId, 'level desc', "$page->startNum, $page->listNum");
         $fieldList = $article->getFieldByCategoryId($categoryId);
-        $template = Loader::get('\Manage\Model\ContentModel')->getModelById($categoryInfo['model_id'], 'list_display')['list_display'];
+        $template = Loader::get('\Manage\Model\ContentModel')->getModelById($categoryInfo['model_id'], 'list_display');
         $this->params('field', $fieldList);
         $this->params('list', $list);
         $this->params('number', $all);
         $this->params('category', $categoryInfo);
         $this->params('page', $page->show());
-        $this->view($template);
+        $this->view($template['list_display']);
     }
 
     public function add($categoryId) {
