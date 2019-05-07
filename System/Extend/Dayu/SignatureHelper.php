@@ -1,6 +1,6 @@
 <?php
 
-namespace Vendor\Dayu;
+namespace Extend\Dayu;
 
 /**
  * 签名助手 2017/11/19

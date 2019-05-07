@@ -3,7 +3,7 @@
 namespace Home\Controller;
 
 use Top\Loader;
-use Vendor\Page;
+use Extend\Page;
 
 /**
  * 前台文档

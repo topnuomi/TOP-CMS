@@ -3,7 +3,7 @@
 namespace Manage\Controller;
 
 use Top\Loader;
-use Vendor\Page;
+use Extend\Page;
 
 class Files extends Manage {
 

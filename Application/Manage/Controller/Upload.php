@@ -8,7 +8,7 @@ class Upload extends Manage {
 
     public function uploadfive() {
         $uploadDir = './Uploads/images/' . date('Y/m/d') . '/';
-        $upload = \Vendor\Upload::init($uploadDir);
+        $upload = \Extend\Upload::init($uploadDir);
         $filename = $upload->uploadPicture(uniqid());
         if ($filename) {
             $picture = Loader::get('\Manage\Model\Files');
@@ -22,7 +22,7 @@ class Upload extends Manage {
 
     public function uploadfiveFile() {
         $uploadDir = './Uploads/files/' . date('Y/m/d') . '/';
-        $upload = \Vendor\Upload::init($uploadDir, ['zip', 'png', 'jpg', 'gif']);
+        $upload = \Extend\Upload::init($uploadDir, ['zip', 'png', 'jpg', 'gif']);
         $filename = $upload->uploadFile(uniqid());
         if ($filename) {
             $picture = Loader::get('\Manage\Model\Files');

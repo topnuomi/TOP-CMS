@@ -3,7 +3,7 @@
  * @author TOP糯米 2017
  */
 
-namespace Vendor;
+namespace Extend;
 
 /**
  * 分页类

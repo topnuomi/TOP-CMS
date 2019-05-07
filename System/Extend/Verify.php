@@ -1,6 +1,6 @@
 <?php
 
-namespace Vendor;
+namespace Extend;
 
 class Verify {
     // 验证码个数$number

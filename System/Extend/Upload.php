@@ -3,7 +3,7 @@
  * @author TOP糯米 2017
  */
 
-namespace Vendor;
+namespace Extend;
 
 /**
  * 文件上传类
@@ -22,7 +22,7 @@ class Upload {
      * 静态调用时传入保存目录以及文件类型
      * @param string $dirName
      * @param string $fileType
-     * @return \Vendor\Upload
+     * @return \Extend\Upload
      */
     public static function init($dirName = '', $fileType = '') {
         if (!self::$instance) {
