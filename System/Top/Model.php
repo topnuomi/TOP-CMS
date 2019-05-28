@@ -5,7 +5,7 @@
 
 namespace Top;
 
-use Top\Database\Driver\Mysqli;
+use Top\Database\Driver\MySQLi;
 
 /**
  * 模型基类
@@ -124,7 +124,7 @@ class Model {
      */
     public function connect() {
         $config = Config::get('db');
-        $object = Mysqli::getInstance($config['host'], $config['user'], $config['pwd'], $config['dbname'], $config['charset'], $config['prefix']);
+        $object = MySQLi::getInstance($config['host'], $config['user'], $config['pwd'], $config['dbname'], $config['charset'], $config['prefix']);
         return $object;
     }
 
