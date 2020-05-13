@@ -95,7 +95,7 @@ class Category extends Model {
         } else {
             $model = $this->getModelByCategoryId($id);
             if ($model->where(['category_id' => $id])->delete()) {
-                if ($this->delete((int)$id)) {
+                if ($this->delete((int)$id) !== false) {
                     return true;
                 }
             }
